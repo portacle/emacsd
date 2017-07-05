@@ -6,9 +6,9 @@
 (setq used-spelling-dictionaries '("en_GB" "en_US"))
 (setq ispell-dictionary (car used-spelling-dictionaries))
 
-(add-hook 'slime-mode-hook #'flyspell-prog-mode)
-(add-hook 'emacs-lisp-mode-hook #'flyspell-prog-mode)
-(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'slime-mode-hook 'flyspell-prog-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
+(add-hook 'text-mode-hook 'flyspell-mode)
 
 (defun switch-dictionary ()
   (interactive)

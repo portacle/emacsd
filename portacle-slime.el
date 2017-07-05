@@ -26,7 +26,7 @@
 (setq lisp-loop-indent-forms-like-keywords t)
 (setq lisp-lambda-list-keyword-parameter-alignment t)
 
-(add-hook 'slime-repl-mode-hook #'set-slime-repl-return)
+(add-hook 'slime-repl-mode-hook 'set-slime-repl-return)
 
 (defun set-slime-repl-return ()
   (define-key slime-repl-mode-map (kbd "RET") 'slime-repl-return-at-end)

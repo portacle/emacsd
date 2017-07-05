@@ -4,24 +4,24 @@
 
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 
-(add-hook 'lisp-mode-hook #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'slime-repl-mode-hook #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook 'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+(add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+(add-hook 'ielm-mode-hook 'enable-paredit-mode)
 
 (put 'paredit-forward-delete 'delete-selection 'supersede)
 (put 'paredit-backward-delete 'delete-selection 'supersede)
 (put 'paredit-newline 'delete-selection t)
-
-(add-hook 'slime-repl-mode-hook #'override-slime-repl-bindings-with-paredit)
 
 (define-portacle-key "M-g" 'raise-sexp)
 
 (defun override-slime-repl-bindings-with-paredit ()
   (define-key slime-repl-mode-map
       (read-kbd-macro paredit-backward-delete-key) nil))
+
+(add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
 
 ;; Fix the spacing for macro characters such as #p, etc.
 (defvar known-macro-characters (make-hash-table))
@@ -56,4 +56,4 @@
 
 (with-eval-after-load 'paredit
   (add-to-list 'paredit-space-for-delimiter-predicates
-               #'paredit-detect-cl-macro-character))
+               'paredit-detect-cl-macro-character))

@@ -16,7 +16,7 @@
            always (package-installed-p package)))
 
 (defun ensure-installed (&rest packages)
-  (unless (apply #'packages-installed-p packages)
+  (unless (apply 'packages-installed-p packages)
     (soft-fetch-package-lists)
     (dolist (package packages)
       (unless (package-installed-p package)
