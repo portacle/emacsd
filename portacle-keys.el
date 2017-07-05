@@ -20,3 +20,10 @@
         (assq-delete-all 'portacle-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist portaclekeys))))
 (ad-activate 'load)
+
+(when (and (eq system-type 'darwin)
+           window-system)
+  (setq mac-command-key-is-meta nil)
+  (setq mac-command-modifier 'super)
+  (setq ns-command-key-is-meta nil)
+  (setq ns-command-modifier 'super))

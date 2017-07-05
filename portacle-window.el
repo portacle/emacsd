@@ -19,11 +19,6 @@
                            (darwin "Monaco-10")
                            (windows-nt "Consolas-10")) nil t))
 
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'control)
-  (setq ns-function-modifier 'super)
-  (setq ns-right-alternate-modifier nil))
-
 ;; http://directed-procrastination.blogspot.co.uk/2014/04/some-emacs-hacks-for-gdb-and-other-stuff.html
 (defun undedicate-window (&optional window)
   (interactive)
