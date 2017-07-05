@@ -12,8 +12,8 @@
     (setf *package-lists-fetched* t)))
 
 (defun packages-installed-p (&rest packages)
-  (loop for package in packages
-        always (package-installed-p package)))
+  (cl-loop for package in packages
+           always (package-installed-p package)))
 
 (defun ensure-installed (&rest packages)
   (unless (apply #'packages-installed-p packages)
