@@ -2,6 +2,8 @@
 
 (ensure-installed 'paredit)
 
+(require 'paredit)
+
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 
 (add-hook 'lisp-mode-hook 'enable-paredit-mode)
