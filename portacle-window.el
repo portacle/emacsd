@@ -62,5 +62,5 @@ it will ask first)."
     (load-file (portacle-path "config/.frame.el"))))
 
 (when window-system
-  (add-hook 'after-init-hook 'load-framegeometry)
+  (add-hook 'emacs-startup-hook 'load-framegeometry)
   (add-hook 'kill-emacs-hook 'save-framegeometry))
