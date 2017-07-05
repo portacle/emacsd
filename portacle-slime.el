@@ -63,5 +63,6 @@
 ;; Activate Slime after init
 (add-hook 'after-init-hook
           (lambda ()
+            (slime-setup portacle-slime-contribs)
             (when window-system
               (slime))))
