@@ -41,3 +41,26 @@ it will ask first)."
     (set-window-dedicated-p window (not (window-dedicated-p window)))))
 
 (define-portacle-key "C-c d" 'toggle-window-dedication)
+
+;;; Restoring frame size
+(defun --normalized-frame-parameter (parameter)
+  (let ((value (frame-parameter (selected-frame) parameter)))
+    (if (number-or-marker-p value) (max value 0) 0)))
+
+(defun save-framegeometry ()
+  (let* ((props '(left top width height))
+         (values (mapcar '--normalized-frame-parameter props)))
+    (with-temp-buffer
+        (cl-loop for prop in props
+                 for val in values
+                 do (insert (format "(add-to-list 'initial-frame-alist '(%s . %d))\n"
+                                    prop val)))
+      (write-file (portacle-path "config/.frame.el")))))
+
+(defun load-framegeometry ()
+  (when (file-exists-p (portacle-path "config/.frame.el"))
+    (load-file (portacle-path "config/.frame.el"))))
+
+(when window-system
+  (add-hook 'after-init-hook 'load-framegeometry)
+  (add-hook 'kill-emacs-hook 'save-framegeometry))
