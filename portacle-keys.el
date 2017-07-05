@@ -23,7 +23,5 @@
 
 (when (and (eq system-type 'darwin)
            window-system)
-  (setq mac-command-key-is-meta nil)
-  (setq mac-command-modifier 'super)
-  (setq ns-command-key-is-meta nil)
-  (setq ns-command-modifier 'super))
+  (setq mac-option-modifier nil)
+  (setq mac-command-modifier 'meta))
