@@ -15,9 +15,10 @@
   (scroll-bar-mode -1)
   (load-theme 'spolsky t)
   (setq confirm-kill-emacs 'y-or-n-p)
-  (set-frame-font (os-case (gnu/linux "Monospace-10")
-                           (darwin "Monaco-10")
-                           (windows-nt "Consolas-10")) nil t))
+  (add-to-list 'initial-frame-alist
+               `(font . ,(os-case (gnu/linux "Monospace-10")
+                                  (darwin "Monaco-10")
+                                  (windows-nt "Consolas-10")))))
 
 ;; http://directed-procrastination.blogspot.co.uk/2014/04/some-emacs-hacks-for-gdb-and-other-stuff.html
 (defun undedicate-window (&optional window)
