@@ -7,7 +7,7 @@
 (company-quickhelp-mode 1)
 (setq company-quickhelp-delay 0.7)
 
-(add-hook 'after-init-hook 'global-company-mode)
+(global-company-mode)
 (push 'slime-company portacle-slime-contribs)
 
 (define-key company-active-map (kbd "<up>") 'company-select-previous)

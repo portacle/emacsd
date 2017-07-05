@@ -61,7 +61,7 @@
                         ,(slime-to-lisp-filename port-filename))))))
 
 ;; Activate Slime after init
-(add-hook 'after-init-hook
+(add-hook 'emacs-startup-hook
           (lambda ()
             (slime-setup portacle-slime-contribs)
             (when window-system

@@ -9,7 +9,7 @@
             (unless (file-exists-p dir)
               (make-directory dir t))))
 
-(add-hook 'after-init-hook
+(add-hook 'emacs-startup-hook
           (lambda ()
             (when (and window-system (not (server-running-p))) 
               (server-start))))
