@@ -8,13 +8,11 @@
                                    `(t ,@(cdr case))
                                    `((eql system-type ',(car case)) ,@(cdr case))))))
 
-(setq portacle-root (or (getenv "ROOT") (expand-file-name "~/")))
+(setq portacle-root (replace-regexp-in-string "\\\\" "/" (or (getenv "ROOT") (expand-file-name "~/"))))
 (setq portacle-os (os-case (gnu/linux "lin") (darwin "mac") (windows-nt "win")))
 
 (defun portacle-path (path)
-  (concat portacle-root (os-case (windows-nt
-                                  (replace-regexp-in-string "/" "\\\\" path))
-                                 (t path))))
+  (concat portacle-root path))
 
 (defun portacle-os-path (path)
   (portacle-path (concat portacle-os "/" path)))
