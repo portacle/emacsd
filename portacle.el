@@ -12,7 +12,9 @@
 (setq portacle-os (os-case (gnu/linux "lin") (darwin "mac") (windows-nt "win")))
 
 (defun portacle-path (path)
-  (concat portacle-root path))
+  (concat portacle-root (os-case (windows-nt
+                                  (replace-regexp-in-string "/" "\\\\" path))
+                                 (t path))))
 
 (defun portacle-os-path (path)
   (portacle-path (concat portacle-os "/" path)))
