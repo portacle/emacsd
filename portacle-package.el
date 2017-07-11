@@ -1,7 +1,7 @@
 (provide 'portacle-package)
 (require 'package)
 
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
 (defvar *package-lists-fetched* nil)
