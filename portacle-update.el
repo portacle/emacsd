@@ -15,9 +15,9 @@
     (with-current-buffer "*portacle-update*"
       (switch-to-buffer (current-buffer))
       (insert "===> Starting Portacle update\n")
-      (insert "  --> Updating root via GIT\n")
-      (portacle-pull-preserving-changes portacle-root)
       (insert "  --> Updating config via GIT\n")
+      (portacle-pull-preserving-changes (portacle-path "config/"))
+      (insert "  --> Updating emacsd via GIT\n")
       (portacle-pull-preserving-changes (portacle-path "all/emacsd/portacle/"))
       (insert "  --> Recompiling ELISP sources\n")
       (portacle-recompile)
