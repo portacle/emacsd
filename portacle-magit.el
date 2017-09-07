@@ -11,3 +11,6 @@
 (setq git-commit-fill-column 9999)
 (setq git-commit-summary-max-length 9999)
 (setq git-commit-finish-query-functions nil)
+
+;; Ensure it uses the proper emacsclient
+(setq with-editor-emacsclient-executable (portacle-bin-path "emacsclient"))
