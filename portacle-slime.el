@@ -2,7 +2,7 @@
 
 (ensure-installed 'slime)
 
-(require 'slime-autoloads)
+(require 'slime)
 
 (setq portacle-slime-contribs '(slime-fancy slime-asdf slime-sprof slime-mdot-fu
                                 slime-compiler-notes-tree slime-hyperdoc
