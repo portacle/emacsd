@@ -33,6 +33,15 @@
 (setq version-control t)
 (setq vc-follow-symlinks t)
 
+(setq browse-url-browser-function
+      (lambda (url &optional new-tab)
+        (os-case (gnu/linux
+                  (call-process "xdg-open" nil 0 nil url))
+                 (darwin
+                  (call-process "open" nil 0 nil url))
+                 (windows-nt
+                  (call-process "cmd" nil 0 nil "/c" (concat "start " url))))))
+
 (defun delete-this-buffer-and-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
