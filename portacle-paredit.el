@@ -47,7 +47,7 @@
          (:not-found
           (determine-cl-macro-character macro-char)
           (or ;; Don't know the result (yet), determine statically.
-              (eql macro-char ?#)))))
+              (cl-find macro-char '(?# ?,))))))
 
 (defun paredit-detect-cl-macro-character (endp delimiter)
   (when (cl-find major-mode '(slime-repl-mode lisp-mode))
