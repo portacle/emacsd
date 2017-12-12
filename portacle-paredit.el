@@ -1,3 +1,4 @@
+;; -*- mode: elisp; lexical-binding: t; -*-
 (provide 'portacle-paredit)
 
 (ensure-installed 'paredit)
