@@ -4,6 +4,7 @@
 (ensure-installed 'paredit)
 
 (require 'paredit)
+(eval-when-compile (require 'cl))
 
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 
@@ -31,12 +32,13 @@
 
 (defun determine-cl-macro-character (macro-char)
   (when (slime-connected-p)
-    (slime-eval-async
-     `(cl:ignore-errors
-       (cl:not (cl:null (cl:get-macro-character
-                         (cl:code-char ,macro-char)))))
-     (lambda (result)
-       (puthash macro-char result known-macro-characters)))))
+    (lexical-let ((macro-char macro-char))
+      (slime-eval-async
+       `(cl:ignore-errors
+         (cl:not (cl:null (cl:get-macro-character
+                           (cl:code-char ,macro-char)))))
+       (lambda (result)
+         (puthash macro-char result known-macro-characters))))))
 
 (defun cl-macro-character-p (macro-char)
   (pcase (gethash macro-char known-macro-characters :not-found)
