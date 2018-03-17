@@ -3,6 +3,7 @@
 (with-current-buffer (get-buffer-create "*portacle-help*")
   (insert-file-contents (portacle-path "config/help.txt"))
   (read-only-mode)
+  (visual-line-mode)
   (emacs-lock-mode 'kill))
 
 (defun portacle-help ()
