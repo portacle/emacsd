@@ -50,6 +50,7 @@
 (require 'portacle-update)
 (require 'portacle-neotree)
 (require 'portacle-slime)
+(require 'portacle-sly)
 (require 'portacle-elisp)
 (require 'portacle-paredit)
 (require 'portacle-company)
@@ -62,3 +63,50 @@
 (require 'portacle-ag)
 (require 'portacle-help)
 (require 'portacle-user)
+
+;;; Setup SLIME or SLY to start at
+;;;
+(defun portacle-let-user-choose-ide (implementation)
+  (let* ((ide-question
+          (concat
+           "Portacle comes with SLY and SLIME, two great common Lisp IDE's."
+           "\n"
+           "Which one would you like to start now? "))
+         (choice
+          (intern
+           (ido-completing-read ide-question'("slime" "sly") nil t nil nil)))
+         (save-question
+          (concat
+           (format
+            "Great! Use `%s' from now on? " choice)
+           "You can customize `portacle-ide' later if you change your mind."))
+         (savep (y-or-n-p save-question)))
+    (when savep
+      (customize-save-variable 'portacle-ide choice))
+    (funcall choice implementation)))
+
+(defgroup portacle nil "Customization group for Portacle.")
+
+(defcustom portacle-ide #'portacle-let-user-choose-ide
+  "If non-nil, Common Lisp IDE to run when Portacle launches.
+
+Value is a function that should accept at least one argument,
+COMMAND, which is either a pathname string pointing to a Common
+Lisp executable, or a symbol designating one, like `sbcl' or
+`ecl' that the function should interpret accordingly.
+
+Currently, Portable uses `sbcl' exclusively.
+
+The symbols `slime' or `sly' are suitable candidates for this
+variable."
+  :type 'function
+  :group 'portacle)
+
+(defun portacle--start-ide-maybe ()
+  "Start Portacle's IDE iff there is a window system."
+  ;; XXX: Why? jt@2018/03/18
+  (when (window-system)
+    (funcall portacle-ide 'sbcl)))
+
+;; Activate Slime after init
+(add-hook 'emacs-startup-hook #'portacle--start-ide-maybe)

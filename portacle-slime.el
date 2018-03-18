@@ -60,9 +60,12 @@
                (funcall (read-from-string "swank:start-server")
                         ,(slime-to-lisp-filename port-filename))))))
 
-;; Activate Slime after init
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (slime-setup portacle-slime-contribs)
-            (when window-system
-              (slime))))
+(slime-setup portacle-slime-contribs)
+
+;; Make sure we don't clash with SLY
+(advice-add 'slime :before
+            (lambda (&rest ignored)
+              (remove-hook 'lisp-mode-hook 'sly-editing-mode t)
+              (add-hook 'lisp-mode-hook 'slime-lisp-mode-hook t))
+            '((name . portacle-advice-before-slime)))
+
