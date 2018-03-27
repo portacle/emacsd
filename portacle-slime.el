@@ -63,9 +63,26 @@
 (slime-setup portacle-slime-contribs)
 
 ;; Make sure we don't clash with SLY
+(defun portacle--resolve-ide-conflict (new-hook
+                                       old-hook)
+  "Replace OLD-HOOK with NEW-HOOK in `lisp-mode-hook'.
+Also re-issue `lisp-mode' in every Lisp source buffer so that SLIME
+or SLY are suitably setup there."
+  (remove-hook 'lisp-mode-hook old-hook)
+  (add-hook 'lisp-mode-hook new-hook t)
+  (mapc (lambda (buf)
+          (with-current-buffer buf
+            (when (eq major-mode 'lisp-mode)
+              ;; XXX: actually our own *scratch* is special because
+              ;; re-issuing lisp-mode there would drown out the pretty
+              ;; buttons.
+              (unless (equal "*scratch*" (buffer-name))
+                (lisp-mode)))))
+        (buffer-list)))
+
 (advice-add 'slime :before
             (lambda (&rest ignored)
-              (remove-hook 'lisp-mode-hook 'sly-editing-mode t)
-              (add-hook 'lisp-mode-hook 'slime-lisp-mode-hook t))
+              (portacle--resolve-ide-conflict 'slime-lisp-mode-hook
+                                              'sly-editing-mode))
             '((name . portacle-advice-before-slime)))
 

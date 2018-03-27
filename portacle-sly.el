@@ -1,5 +1,9 @@
 (provide 'portacle-sly)
 
+;; SLY checks lisp-mode-hook for incompatibilities at load-time and
+;; queries the user immediately. This being a no-no in Portacle, make
+;; sure we get rid of such problems even before installing/loading
+;; SLY.
 (remove-hook 'lisp-mode-hook 'slime-lisp-mode-hook)
 
 (ensure-installed 'sly)
@@ -20,9 +24,15 @@
 (setq sly-lisp-implementations
       `((sbcl (,(portacle-bin-path "sbcl")))))
 
-;; Make sure we don't clash with SLIME
+;; Portacle's use of powerline.el hides SLY's non-intrusive mode-line,
+;; so just bite that bullet and make it as intrusive as SLIME's.
+(add-to-list 'minor-mode-alist '(sly-mode
+                                 (" " sly--mode-line-format " ")))
+
+;; Make sure we don't clash with SLIME when starting
+(require 'portacle-slime) ; for portacle--resolve-ide-conflict
 (advice-add 'sly :before
             (lambda (&rest ignored)
-              (remove-hook 'lisp-mode-hook 'slime-lisp-mode-hook)
-              (add-hook 'lisp-mode-hook 'sly-editing-mode t))
+              (portacle--resolve-ide-conflict 'sly-editing-mode
+                                              'slime-lisp-mode-hook))
             '((name . portacle-advice-before-sly)))
