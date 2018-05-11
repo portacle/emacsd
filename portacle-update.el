@@ -9,6 +9,23 @@
 (defun portacle-recompile (&optional force)
   (byte-recompile-directory (portacle-path "all/emacsd/portacle/") 0 force))
 
+(defun portacle-update-packages ()
+  (interactive)
+  (package-refresh-contents)
+  (cl-flet ((get-version (name where)
+              (let ((pkg (second (assq name where))))
+                (when pkg
+                  (package-desc-version pkg)))))
+    (save-window-excursion
+     (let ((to-delete ()))
+       (cl-loop for (name package-desc) in package-alist
+                for in-archive = (get-version name package-archive-contents)
+                do (when (and in-archive
+                              (version-list-< (get-version name package-alist) in-archive))
+                     (package-install name)
+                     (push package-desc to-delete)))
+       (mapcar #'package-delete to-delete)))))
+
 (defun portacle-update ()
   (interactive)
   (with-help-window "*portacle-update*"
@@ -26,10 +43,7 @@
       (insert "  --> Updating client via QL\n")
       (slime-eval '(ql:update-client :prompt cl:nil))
       (insert "  --> Updating packages via ELPA\n")
-      (package-refresh-contents)
-      (dolist (elt package-archive-contents)
-        (when (package-installed-p (car elt))
-          (package-install (car elt))))
+      (poratcle-update-packages)
       (insert "===> All done\n")
       (insert "\n Please restart Portacle for the changes to take full effect.\n")
       (insert "\n Press q to close this buffer."))))
