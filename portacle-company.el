@@ -1,6 +1,6 @@
 (provide 'portacle-company)
 
-(ensure-installed 'company 'company-quickhelp 'slime-company)
+(ensure-installed 'company 'company-quickhelp 'slime-company 'sly-company)
 
 (require 'company)
 
@@ -9,6 +9,8 @@
 
 (global-company-mode)
 (push 'slime-company portacle-slime-contribs)
+(add-hook 'sly-mode-hook 'sly-company-mode)
+(add-to-list 'company-backends 'sly-company)
 
 (define-key company-active-map (kbd "<up>") 'company-select-previous)
 (define-key company-active-map (kbd "<down>") 'company-select-next)

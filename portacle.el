@@ -50,6 +50,7 @@
 (require 'portacle-update)
 (require 'portacle-neotree)
 (require 'portacle-slime)
+(require 'portacle-sly)
 (require 'portacle-elisp)
 (require 'portacle-paredit)
 (require 'portacle-company)
@@ -62,3 +63,12 @@
 (require 'portacle-ag)
 (require 'portacle-help)
 (require 'portacle-user)
+
+(defun portacle--startup ()
+  "Start Portacle's IDE iff there is a window system."
+  (when (window-system)
+    (funcall portacle-ide 'sbcl)
+    (portacle-scratch-help)))
+
+;; Activate Slime after init
+(add-hook 'emacs-startup-hook #'portacle--startup)
