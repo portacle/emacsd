@@ -78,6 +78,7 @@
            (message "No such project found.")))))
 
 ;; Configuration of user variables
+;; This kinda fuckin' sucks, I should rewrite it sometime.
 (cl-defun portacle-configure (&key name email licence)
   (interactive)
   (let ((name (or name (read-string "Your name: " user-full-name)))
@@ -86,8 +87,14 @@
     (call-process magit-git-executable nil nil t "config" "--file" (portacle-path "config/git/config") "user.name" name)
     (call-process magit-git-executable nil nil t "config" "--file" (portacle-path "config/git/config") "user.email" email)
     (portacle-fwrite (prin1-to-string `(setq user-full-name ,name)) (portacle-path "config/user.el") t)
+    (portacle-fwrite "\n" (portacle-path "config/user.el") t)
     (portacle-fwrite (prin1-to-string `(setq user-mail-address ,email)) (portacle-path "config/user.el") t)
+    (portacle-fwrite "\n" (portacle-path "config/user.el") t)
     (portacle-fwrite (prin1-to-string `(setq project-default-licence ,licence)) (portacle-path "config/user.el") t)
+    (portacle-fwrite "\n" (portacle-path "config/user.el") t)
+    (portacle-fwrite (prin1-to-string `(setq portacle-setup-done-p t)) (portacle-path "config/user.el") t)
     (setq user-full-name name)
     (setq user-mail-address email)
+    (setq project-default-licence licence)
+    (setq portacle-setup-done-p t)
     (message "User information set.")))

@@ -1,4 +1,27 @@
+;; -*- lexical-binding: t -*-
 (provide 'portacle-help)
+
+(defgroup portacle nil "Customization group for Portacle.")
+
+(defcustom portacle-ide #'slime
+  "If non-nil, Common Lisp IDE to run when Portacle launches.
+
+Value is a function that should accept at least one argument,
+COMMAND, which is either a pathname string pointing to a Common
+Lisp executable, or a symbol designating one, like `sbcl' or
+`ecl' that the function should interpret accordingly.
+
+Currently, Portacle uses `sbcl' exclusively.
+
+The symbols `slime' or `sly' are suitable candidates for this
+variable."
+  :type 'function
+  :group 'portacle)
+
+(defcustom portacle-setup-done-p nil
+  "If NIL, causes the setup prompts to show in the scratch buffer."
+  :type 'boolean
+  :group 'portacle)
 
 (with-current-buffer (get-buffer-create "*portacle-help*")
   (insert-file-contents (portacle-path "config/help.txt"))
@@ -22,80 +45,80 @@
                     'rear-nonsticky nil
                     'action action))
 
-(defun portacle--help-strings ()
-  "Strings to be inserted in the portacle *scratch* buffer.
-Some of these strings are interactive buttons"
-  (let* ((website "https://github.com/Shinmera/portacle")
-         (website-button
-          (portacle--help-button
-           website
-           (lambda (&optional _event)
-             (browse-url "https://github.com/Shinmera/portacle"))))
-         (help-button
-          (portacle--help-button "*portacle-help* buffer" #'portacle-help))
-         (ide-text )
-         (switch-ide-button
-          (portacle--help-button
-           (format "switch to %s"
+(defun portacle--url-button (url &optional label)
+  (list
+   (portacle--help-button
+    (or label url)
+    (lambda (&optional _)
+      (browse-url url)))))
+
+(defun portacle--buffer-button (buffer &optional label)
+  (list
+   (portacle--help-button
+    (or label buffer)
+    (lambda (&optional _)
+      (switch-to-buffer (get-buffer buffer))))))
+
+(defun portacle--first-time-setup ()
+  (unless portacle-setup-done-p
+    (list "Portacle is currently running" (upcase (format " %s " portacle-ide)) ", but you can"
+          "\n;;   " (portacle--help-button
+           (format "Switch to %s"
                    (if (eq portacle-ide 'slime) "SLY" "SLIME"))
            (lambda (&optional _event)
              (interactive)
              (let ((target (if (eq portacle-ide 'slime) 'sly 'slime)))
                (funcall target 'sbcl)
                (customize-save-variable 'portacle-ide target)
-               (portacle-scratch-help 'preserve)))))
-         (configure-button
-          (portacle--help-button "configuring a few"
-                                 (lambda (&optional _event)
-                                   (interactive)
-                                   (call-interactively 'portacle-configure))))
-         (dismiss-notes-button
-          (portacle--help-button
-           "click here"
+               (portacle-scratch-help 'preserve))))
+          "\n;; You should also configure Portacle with the"
+          "\n;;   " (portacle--help-button
+           "First-time setup"
            (lambda (&optional _event)
              (interactive)
-             (let ((inhibit-read-only t))
-               (delete-region (car portacle--help-region)
-                              (cdr portacle--help-region)))))))
-    (list
-     "Welcome to Portacle, the Portable Common Lisp Environment.
+             (call-interactively 'portacle-configure)))
+          "\n;; ")))
 
-For information on Portacle and how to use it, please read the
-website at "
-     website-button
-     " or see the "
-     help-button 
-     " (to switch to that buffer, click the link or, later on,
-press 'C-h h' , which is pressing 'Control-h', letting go, then
-pressing 'h').\n\nWe've already started a Lisp process for you:
-below this window there should be another with a ready-to-use
-REPL (we used "
-     (upcase (format "%s" portacle-ide))
-     " to start Lisp, but if you want, you can "
-     switch-ide-button
-     " instead).\n\nIf you haven't done so, spend some seconds "
-     configure-button
-     " very basic Portacle variables.\n\nYou can use this buffer
-for notes and tinkering with small pieces of code. Finally "
-     dismiss-notes-button
-     " to dismiss this introductory text.")))
+(defun portacle--read-inner-list (string)
+  (let ((start 0))
+    (loop for (val . pos) = (ignore-errors
+                             (read-from-string string start))
+          while pos
+          do (setq start pos)
+          collect val)))
 
-(defgroup portacle nil "Customization group for Portacle.")
+(defvar portacle-scratch-commands
+  '((url . portacle--url-button)
+    (buffer . portacle--buffer-button)
+    (first-time-setup . portacle--first-time-setup)))
 
-(defcustom portacle-ide #'slime
-  "If non-nil, Common Lisp IDE to run when Portacle launches.
+(defun portacle--interpret-scratch-expr (expr)
+  (let ((fun (alist-get (first expr) portacle-scratch-commands
+                        (lambda (&rest _) (list "{?}")))))
+    (apply fun (rest expr))))
 
-Value is a function that should accept at least one argument,
-COMMAND, which is either a pathname string pointing to a Common
-Lisp executable, or a symbol designating one, like `sbcl' or
-`ecl' that the function should interpret accordingly.
-
-Currently, Portable uses `sbcl' exclusively.
-
-The symbols `slime' or `sly' are suitable candidates for this
-variable."
-  :type 'function
-  :group 'portacle)
+(defun portacle--scratch-contents (&optional file)
+  (with-temp-buffer
+    (insert-file-contents (or file (portacle-path "config/scratch.txt")))
+    (beginning-of-buffer)
+    (let ((parts ()))
+      (cl-loop with start = 1
+               for char = (char-after (point))
+               while char
+               do (when (= char ?{)
+                    (push (buffer-substring start (point)) parts)
+                    (let ((start (point)))
+                      ;; FIXME: This is primitive
+                      (loop for char = (char-after (point))
+                            until (= char ?}) do (forward-char))
+                      (dolist (part (portacle--interpret-scratch-expr
+                                     (portacle--read-inner-list
+                                      (buffer-substring (1+ start) (point)))))
+                        (push part parts)))
+                    (setf start (1+ (point))))
+               (forward-char)
+               finally (push (buffer-substring start (point)) parts))
+      (nreverse parts))))
 
 ;; Workaround for font-lock.el's inability to use easily override
 ;; faces in lisp comments.
@@ -135,22 +158,12 @@ variable."
        '((portacle--help-find-scratch-buttons . (0 'button prepend))))
       (save-excursion
         (let ((start (point-marker)))
-          (apply #'insert (portacle--help-strings))
-          (set-fill-column 60)
-          (fill-region start (point))
-          (comment-region start (point))
+          (apply #'insert (portacle--scratch-contents))
           (setq portacle--help-region
                 (cons start
                       (point-marker)))
           (add-text-properties (car portacle--help-region)
                                (cdr portacle--help-region)
-                               '(read-only t))
-          (unless preserve-rest-of-buffer
-            (insert "\n\n")
-            (pp '(defun hello (name)
-                   (princ "Howdy, ")
-                   (princ (string-capitalize name)))
-                (current-buffer))
-            (pp '(hello "stranger") (current-buffer))))))))
+                               '(read-only t)))))))
 
 
