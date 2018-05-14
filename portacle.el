@@ -46,6 +46,7 @@
 (require 'portacle-package)
 (require 'portacle-keys)
 (require 'portacle-general)
+(require 'portacle-config)
 (require 'portacle-project)
 (require 'portacle-update)
 (require 'portacle-neotree)
