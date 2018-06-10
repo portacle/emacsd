@@ -5,7 +5,8 @@
 (require 'company)
 
 (company-quickhelp-mode 1)
-(setq company-quickhelp-delay 0.7)
+(setq company-quickhelp-delay 0.7
+      company-tooltip-align-annotations t)
 
 (global-company-mode)
 (push 'slime-company portacle-slime-contribs)
