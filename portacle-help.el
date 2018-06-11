@@ -1,11 +1,11 @@
 ;; -*- lexical-binding: t -*-
-(provide 'portacle-help)
+(require 'cl-lib)
+(require 'portacle-keys) ; define-portacle-key
+(require 'portacle-config)
 
-(with-current-buffer (get-buffer-create "*portacle-help*")
-  (insert-file-contents (portacle-path "config/help.txt"))
-  (read-only-mode)
-  (visual-line-mode)
-  (emacs-lock-mode 'kill))
+;; can't require `portacle', because that requires us, perhaps make a
+;; `portacle-common' or `portacle-utils' in the future.
+(declare-function portacle-path "portacle" (path))
 
 (defun portacle-help (&optional _event)
   (interactive)
@@ -59,7 +59,7 @@
 
 (defun portacle--read-inner-list (string)
   (let ((start 0))
-    (loop for (val . pos) = (ignore-errors
+    (cl-loop for (val . pos) = (ignore-errors
                              (read-from-string string start))
           while pos
           do (setq start pos)
@@ -71,14 +71,14 @@
     (first-time-setup . portacle--first-time-setup)))
 
 (defun portacle--interpret-scratch-expr (expr)
-  (let ((fun (alist-get (first expr) portacle-scratch-commands
+  (let ((fun (alist-get (cl-first expr) portacle-scratch-commands
                         (lambda (&rest _) (list "{?}")))))
-    (apply fun (rest expr))))
+    (apply fun (cl-rest expr))))
 
 (defun portacle--scratch-contents (&optional file)
   (with-temp-buffer
     (insert-file-contents (or file (portacle-path "config/scratch.txt")))
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (let ((parts ()))
       (cl-loop with start = 1
                for char = (char-after (point))
@@ -87,7 +87,7 @@
                     (push (buffer-substring start (point)) parts)
                     (let ((start (point)))
                       ;; FIXME: This is primitive
-                      (loop for char = (char-after (point))
+                      (cl-loop for char = (char-after (point))
                             until (= char ?}) do (forward-char))
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
@@ -144,4 +144,15 @@
                                (cdr portacle--help-region)
                                '(read-only t)))))))
 
+(defun portacle-create-help-buffer ()
+  "Ensure a *portacle-help* buffer is created and has good tips."
+  (with-current-buffer (get-buffer-create "*portacle-help*")
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (insert-file-contents (portacle-path "config/help.txt"))
+      (read-only-mode)
+      (visual-line-mode)
+      (emacs-lock-mode 'kill))))
+
+(provide 'portacle-help)
 
