@@ -1,21 +1,27 @@
-(provide 'portacle-window)
+(require 'browse-url)
+(require 'cl-lib)
+(require 'portacle-package)
+(require 'portacle-keys)
+;; can't require `portacle', because that requires us, perhaps make a
+;; `portacle-common' or `portacle-utils' in the future.
+(declare-function portacle-path "portacle" (path))
 
 (ensure-installed 'sublime-themes)
 
 (setq inhibit-startup-screen t)
 (setq pop-up-frame-function (lambda () (split-window-right)))
 (setq split-height-threshold 1400)
-(setq split-width-treshold 1500)
+(setq split-width-threshold 1500)
 (setq browse-url-browser-function 'browse-url-generic)
 (setq browse-url-generic-program (or (getenv "BROWSER") "xdg-open"))
 (setq ring-bell-function 'ignore)
 
-(when window-system
+(defun portacle--setup-frame ()
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (load-theme 'spolsky t)
   (setq confirm-kill-emacs 'y-or-n-p)
-  (add-to-list 'initial-frame-alist
+  (add-to-list 'default-frame-alist
                '(font . "Noto Mono-10:antialias=subpixel")))
 
 ;; http://directed-procrastination.blogspot.co.uk/2014/04/some-emacs-hacks-for-gdb-and-other-stuff.html
@@ -63,3 +69,5 @@ it will ask first)."
 (when window-system
   (add-hook 'emacs-startup-hook 'load-framegeometry)
   (add-hook 'kill-emacs-hook 'save-framegeometry))
+
+(provide 'portacle-window)
