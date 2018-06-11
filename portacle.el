@@ -65,7 +65,7 @@
 (require 'portacle-help)
 (require 'portacle-user)
 
-(portacle-create-help-buffer)
+(portacle--create-help-buffer)
 (when window-system (portacle--setup-frame))
 
 (defun portacle--startup ()

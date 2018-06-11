@@ -144,7 +144,7 @@
                                (cdr portacle--help-region)
                                '(read-only t)))))))
 
-(defun portacle-create-help-buffer ()
+(defun portacle--create-help-buffer ()
   "Ensure a *portacle-help* buffer is created and has good tips."
   (with-current-buffer (get-buffer-create "*portacle-help*")
     (let ((inhibit-read-only t))
