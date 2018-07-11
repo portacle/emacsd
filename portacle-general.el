@@ -11,7 +11,7 @@
 (electric-indent-mode 1)
 (semantic-mode 1)
 (delete-selection-mode 1)
-(global-linum-mode 1)
+(global-display-line-numbers-mode 1)
 
 (smex-initialize)
 (powerline-default-theme)
@@ -22,7 +22,6 @@
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (setq enable-local-variables :all)
-(setq linum-format "%d ")
 (setq backup-by-copying t)
 (setq backup-directory-alist `((,tramp-file-name-regexp . nil)
                                (".*" . ,(portacle-path "config/saves/"))))
