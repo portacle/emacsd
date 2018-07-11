@@ -29,6 +29,9 @@
 (add-to-list 'minor-mode-alist '(sly-mode
                                  (" " sly--mode-line-format " ")))
 
+;; Don't turn on paredit in REPL, but at least use electric-pair-mode
+(add-hook 'sly-mrepl-mode-hook 'electric-pair-local-mode)
+
 ;; Make sure we don't clash with SLIME when starting
 (require 'portacle-slime) ; for portacle--resolve-ide-conflict
 (advice-add 'sly :before
