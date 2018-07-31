@@ -13,7 +13,7 @@
   (interactive)
   (package-refresh-contents)
   (cl-flet ((get-version (name where)
-              (let ((pkg (second (assq name where))))
+              (let ((pkg (cl-second (assq name where))))
                 (when pkg
                   (package-desc-version pkg)))))
     (save-window-excursion
