@@ -43,7 +43,7 @@
       (insert "  --> Updating client via QL\n")
       (slime-eval '(ql:update-client :prompt cl:nil))
       (insert "  --> Updating packages via ELPA\n")
-      (poratcle-update-packages)
+      (portacle-update-packages)
       (insert "===> All done\n")
       (insert "\n Please restart Portacle for the changes to take full effect.\n")
       (insert "\n Press q to close this buffer."))))
