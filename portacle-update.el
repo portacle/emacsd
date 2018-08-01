@@ -23,7 +23,8 @@
                 do (when (and in-archive
                               (version-list-< (get-version name package-alist) in-archive))
                      (package-install name)
-                     (push package-desc to-delete)))
+                     (unless (package--used-elsewhere-p package-desc)
+                       (push package-desc to-delete))))
        (mapcar #'package-delete to-delete)))))
 
 (defun portacle-update ()
