@@ -65,8 +65,10 @@
 (require 'portacle-help)
 (require 'portacle-user)
 
+(when (window-system)
+  (portacle--setup-frame))
 (portacle--create-help-buffer)
-(when window-system (portacle--setup-frame))
+(portacle-load-user-init)
 
 (defun portacle--startup ()
   "Start Portacle's IDE iff there is a window system."
