@@ -30,6 +30,20 @@
     (lambda (&optional _)
       (browse-url url)))))
 
+(defun portacle--key-button (key &optional label)
+  (list
+   (portacle--help-button
+    (or label key)
+    (lambda (&optional _)
+      (helpful-key (kbd key))))))
+
+(defun portacle--function-button (fun &optional label)
+  (list
+   (portacle--help-button
+    (or label function)
+    (lambda (&optional _)
+      (helpful-callable (intern fun))))))
+
 (defun portacle--buffer-button (buffer &optional label)
   (list
    (portacle--help-button
@@ -65,19 +79,21 @@
           do (setq start pos)
           collect val)))
 
-(defvar portacle-scratch-commands
+(defvar portacle-markup-commands
   '((url . portacle--url-button)
+    (key . portacle--key-button)
     (buffer . portacle--buffer-button)
+    (function . portacle--function-button)
     (first-time-setup . portacle--first-time-setup)))
 
 (defun portacle--interpret-scratch-expr (expr)
-  (let ((fun (alist-get (cl-first expr) portacle-scratch-commands
+  (let ((fun (alist-get (cl-first expr) portacle-markup-commands
                         (lambda (&rest _) (list "{?}")))))
     (apply fun (cl-rest expr))))
 
-(defun portacle--scratch-contents (&optional file)
+(defun portacle-markup-file (file)
   (with-temp-buffer
-    (insert-file-contents (or file (portacle-path "config/scratch.txt")))
+      (insert-file-contents file)
     (goto-char (point-min))
     (let ((parts ()))
       (cl-loop with start = 1
@@ -88,7 +104,7 @@
                     (let ((start (point)))
                       ;; FIXME: This is primitive
                       (cl-loop for char = (char-after (point))
-                            until (= char ?}) do (forward-char))
+                               until (= char ?}) do (forward-char))
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
                                       (buffer-substring (1+ start) (point)))))
@@ -100,7 +116,7 @@
 
 ;; Workaround for font-lock.el's inability to use easily override
 ;; faces in lisp comments.
-(defun portacle--help-find-scratch-buttons (limit)
+(defun portacle--find-buttons (limit)
   (let* ((prop-change (next-single-property-change (point)
                                                    'button
                                                    nil
@@ -133,10 +149,10 @@
       (lisp-mode)
       (font-lock-add-keywords
        nil
-       '((portacle--help-find-scratch-buttons . (0 'button prepend))))
+       '((portacle--find-buttons . (0 'button prepend))))
       (save-excursion
         (let ((start (point-marker)))
-          (apply #'insert (portacle--scratch-contents))
+          (apply #'insert (portacle-markup-file (portacle-path "config/scratch.txt")))
           (setq portacle--help-region
                 (cons start
                       (point-marker)))
@@ -149,7 +165,7 @@
   (with-current-buffer (get-buffer-create "*portacle-help*")
     (let ((inhibit-read-only t))
       (erase-buffer)
-      (insert-file-contents (portacle-path "config/help.txt"))
+      (apply #'insert (portacle-markup-file (portacle-path "config/scratch.txt")))
       (read-only-mode)
       (visual-line-mode)
       (emacs-lock-mode 'kill))))
