@@ -42,7 +42,7 @@
    (portacle--help-button
     (or label function)
     (lambda (&optional _)
-      (helpful-callable (intern fun))))))
+      (helpful-callable fun)))))
 
 (defun portacle--buffer-button (buffer &optional label)
   (list
@@ -74,10 +74,10 @@
 (defun portacle--read-inner-list (string)
   (let ((start 0))
     (cl-loop for (val . pos) = (ignore-errors
-                             (read-from-string string start))
-          while pos
-          do (setq start pos)
-          collect val)))
+                                (read-from-string string start))
+             while pos
+             do (setq start pos)
+             collect val)))
 
 (defvar portacle-markup-commands
   '((url . portacle--url-button)
@@ -104,7 +104,12 @@
                     (let ((start (point)))
                       ;; FIXME: This is primitive
                       (cl-loop for char = (char-after (point))
-                               until (= char ?}) do (forward-char))
+                               do (case char
+                                    (?\\ (forward-char)
+                                         (forward-char))
+                                    (?} (return))
+                                    (T (forward-char)))
+                               until (= char ?}) do)
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
                                       (buffer-substring (1+ start) (point)))))
