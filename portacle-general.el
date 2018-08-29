@@ -1,7 +1,7 @@
 (provide 'portacle-general)
 (load-library "iso-transl")
 
-(ensure-installed 'smex 'powerline)
+(ensure-installed 'smex 'powerline 'helpful)
 
 (require 'powerline)
 (require 'smex)
@@ -61,5 +61,8 @@
     (goto-char position)))
 
 (define-portacle-key "C-c k" 'delete-this-buffer-and-file)
+(define-portacle-key "C-h f" 'helpful-callable)
+(define-portacle-key "C-h v" 'helpful-variable)
+(define-portacle-key "C-h k" 'helpful-key)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
