@@ -40,7 +40,7 @@
 (defun portacle--function-button (fun &optional label)
   (list
    (portacle--help-button
-    (or label function)
+    (or label (symbol-name fun))
     (lambda (&optional _)
       (helpful-callable fun)))))
 
