@@ -109,7 +109,7 @@
                                          (forward-char))
                                     (?} (return))
                                     (T (forward-char)))
-                               until (= char ?}) do)
+                               until (= char ?}))
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
                                       (buffer-substring (1+ start) (point)))))
