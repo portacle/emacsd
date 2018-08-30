@@ -170,7 +170,7 @@
   (with-current-buffer (get-buffer-create "*portacle-help*")
     (let ((inhibit-read-only t))
       (erase-buffer)
-      (apply #'insert (portacle-markup-file (portacle-path "config/scratch.txt")))
+      (apply #'insert (portacle-markup-file (portacle-path "config/help.txt")))
       (read-only-mode)
       (visual-line-mode)
       (emacs-lock-mode 'kill))))
