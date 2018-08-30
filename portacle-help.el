@@ -104,12 +104,12 @@
                     (let ((start (point)))
                       ;; FIXME: This is primitive
                       (cl-loop for char = (char-after (point))
+                               while char
                                do (case char
                                     (?\\ (forward-char)
                                          (forward-char))
                                     (?} (return))
-                                    (T (forward-char)))
-                               until (= char ?}))
+                                    (t (forward-char))))
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
                                       (buffer-substring (1+ start) (point)))))
