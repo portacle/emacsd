@@ -105,10 +105,10 @@
                       ;; FIXME: This is primitive
                       (cl-loop for char = (char-after (point))
                                while char
-                               do (case char
+                               do (cl-case char
                                     (?\\ (forward-char)
                                          (forward-char))
-                                    (?} (return))
+                                    (?} (cl-return))
                                     (t (forward-char))))
                       (dolist (part (portacle--interpret-scratch-expr
                                      (portacle--read-inner-list
