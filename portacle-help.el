@@ -52,6 +52,13 @@
     (lambda (&optional _)
       (switch-to-buffer (get-buffer buffer))))))
 
+(defun portacle--file-button (file &optional label)
+  (list
+   (portacle--help-button
+    (or label file)
+    (lambda (&optional _)
+      (find-file (portacle-path file))))))
+
 (defun portacle--first-time-setup ()
   (unless portacle-setup-done-p
     (list "Portacle is currently running" (upcase (format " %s " portacle-ide)) ", but you can"
@@ -85,6 +92,7 @@
     (key . portacle--key-button)
     (buffer . portacle--buffer-button)
     (function . portacle--function-button)
+    (file . portacle--file-button)
     (first-time-setup . portacle--first-time-setup)))
 
 (defun portacle--interpret-scratch-expr (expr)
