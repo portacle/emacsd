@@ -1,12 +1,13 @@
 (provide 'portacle-general)
 (load-library "iso-transl")
 
-(ensure-installed 'smex 'powerline 'helpful)
+(ensure-installed 'smex 'doom-themes 'doom-modeline 'helpful)
 
-(require 'powerline)
 (require 'smex)
 (require 'helpful)
+(require 'doom-modeline)
 
+(doom-modeline-init)
 (ido-mode 1)
 (show-paren-mode 1)
 (electric-indent-mode 1)
@@ -15,7 +16,6 @@
 (global-display-line-numbers-mode 1)
 
 (smex-initialize)
-(powerline-default-theme)
 
 (setq-default indent-tabs-mode nil)
 (setq-default buffer-file-coding-system 'utf-8-unix)
