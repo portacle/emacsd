@@ -160,10 +160,7 @@
           (apply #'insert (portacle-markup-file (portacle-path "config/scratch.txt")))
           (setq portacle--help-region
                 (cons start
-                      (point-marker)))
-          (add-text-properties (car portacle--help-region)
-                               (cdr portacle--help-region)
-                               '(read-only t)))))))
+                      (point-marker))))))))
 
 (defun portacle--create-help-buffer ()
   "Ensure a *portacle-help* buffer is created and has good tips."
