@@ -4,9 +4,9 @@
 
 (require 'slime)
 
-(setq portacle-slime-contribs '(slime-fancy slime-asdf slime-sprof slime-mdot-fu
-                                slime-compiler-notes-tree slime-hyperdoc
-                                slime-indentation slime-repl))
+(setq slime-contribs '(slime-fancy slime-asdf slime-sprof slime-mdot-fu
+                       slime-compiler-notes-tree slime-hyperdoc
+                       slime-indentation slime-repl))
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 (setq slime-net-coding-system 'utf-8-unix)
 (setq slime-startup-animation nil)
@@ -59,8 +59,6 @@
                (funcall (read-from-string "swank-loader:init"))
                (funcall (read-from-string "swank:start-server")
                         ,(slime-to-lisp-filename port-filename))))))
-
-(slime-setup portacle-slime-contribs)
 
 ;; Make sure we don't clash with SLY
 (defun portacle--resolve-ide-conflict (new-hook

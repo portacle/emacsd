@@ -9,7 +9,7 @@
       company-tooltip-align-annotations t)
 
 (global-company-mode)
-(push 'slime-company portacle-slime-contribs)
+(push 'slime-company slime-contribs)
 
 (define-key company-active-map (kbd "<up>") 'company-select-previous)
 (define-key company-active-map (kbd "<down>") 'company-select-next)
