@@ -1,4 +1,3 @@
-(require 'browse-url)
 (require 'cl-lib)
 (require 'portacle-package)
 (require 'portacle-keys)
@@ -12,8 +11,6 @@
 (setq pop-up-frame-function (lambda () (split-window-right)))
 (setq split-height-threshold 1400)
 (setq split-width-threshold 1500)
-(setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program (or (getenv "BROWSER") "xdg-open"))
 (setq ring-bell-function 'ignore)
 
 (defun portacle--setup-frame ()
