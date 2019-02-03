@@ -5,6 +5,7 @@
 
 (require 'powerline)
 (require 'smex)
+(require 'helpful)
 
 (ido-mode 1)
 (show-paren-mode 1)
