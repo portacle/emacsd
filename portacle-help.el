@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t -*-
+(require 'browse-url)
 (require 'cl-lib)
 (require 'portacle-keys) ; define-portacle-key
 (require 'portacle-config)
