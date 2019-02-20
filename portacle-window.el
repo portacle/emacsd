@@ -21,7 +21,7 @@
     (setq inhibit-compacting-font-caches t))
   (setq confirm-kill-emacs 'y-or-n-p)
   (add-to-list 'default-frame-alist
-               '(font . "-GOOG-Noto Sans Mono-normal-normal-normal-*-13-*-*-*-*-0-iso10646-1")))
+               '(font . "-GOOG-Noto Mono-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")))
 
 ;; http://directed-procrastination.blogspot.co.uk/2014/04/some-emacs-hacks-for-gdb-and-other-stuff.html
 (defun undedicate-window (&optional window)
