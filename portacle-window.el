@@ -17,6 +17,8 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (load-theme 'spolsky t)
+  (when (eql system-type 'windows-nt)
+    (setq inhibit-compacting-font-caches t))
   (setq confirm-kill-emacs 'y-or-n-p)
   (add-to-list 'default-frame-alist
                '(font . "Noto Mono-10:antialias=subpixel")))
