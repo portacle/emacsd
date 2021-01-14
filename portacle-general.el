@@ -9,6 +9,7 @@
 
 (doom-modeline-init)
 (ido-mode 1)
+(setq show-paren-delay 0) ; must be set before show-paren-mode
 (show-paren-mode 1)
 (electric-indent-mode 1)
 (semantic-mode 1)
@@ -19,7 +20,6 @@
 
 (setq-default indent-tabs-mode nil)
 (setq-default buffer-file-coding-system 'utf-8-unix)
-(setq show-paren-delay 0)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (setq enable-local-variables :all)
