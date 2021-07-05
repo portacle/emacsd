@@ -24,7 +24,8 @@
                               (version-list-< (get-version name package-alist) in-archive))
                      (package-install name)
                      (push package-desc to-delete)))
-       (mapcar #'package-delete to-delete)))))
+       (with-demoted-errors "No worries: %S"
+         (mapcar #'package-delete to-delete))))))
 
 (defun portacle-update ()
   (interactive)
