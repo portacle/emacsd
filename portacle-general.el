@@ -1,11 +1,12 @@
 (provide 'portacle-general)
 (load-library "iso-transl")
 
-(ensure-installed 'smex 'doom-themes 'doom-modeline 'helpful)
+(ensure-installed 'smex 'doom-themes 'doom-modeline 'helpful 'centaur-tabs)
 
 (require 'smex)
 (require 'helpful)
 (require 'doom-modeline)
+(require 'centaur-tabs)
 
 (doom-modeline-init)
 (ido-mode 1)
@@ -32,6 +33,14 @@
 (setq kept-old-versions 2)
 (setq version-control t)
 (setq vc-follow-symlinks t)
+(setq centaur-tabs-height 32)
+(setq centaur-tabs-style "bar")
+(setq centaur-tabs-set-icons t)
+(setq centaur-tabs-gray-out-icons 'buffer)
+(setq centaur-tabs-set-bar 'under)
+(setq x-underline-at-descent-line t)
+(centaur-tabs-headline-match)
+(centaur-tabs-mode t)
 
 (defun delete-this-buffer-and-file ()
   "Removes file connected to current buffer and kills buffer."
