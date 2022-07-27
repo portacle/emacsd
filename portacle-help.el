@@ -12,6 +12,7 @@
   (interactive)
   (switch-to-buffer (get-buffer "*portacle-help*")))
 
+(advice-add 'help-with-tutorial :override #'portacle-help)
 (define-portacle-key "C-h h" 'portacle-help)
 
 (defvar portacle--help-region
