@@ -1,6 +1,9 @@
 (provide 'portacle-package)
 (require 'package)
 
+(setq package-gnupghome-dir nil)
+;(setq package-check-signature nil)
+
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
