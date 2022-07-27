@@ -8,7 +8,7 @@
 (require 'doom-modeline)
 (require 'centaur-tabs)
 
-(doom-modeline-init)
+(doom-modeline-mode 1)
 (ido-mode 1)
 (ido-everywhere 1)
 (setq show-paren-delay 0) ; must be set before show-paren-mode
