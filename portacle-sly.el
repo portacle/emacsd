@@ -22,7 +22,7 @@
 
 ;; Make sure SLY knows about our SBCL
 (setq sly-lisp-implementations
-      `((sbcl (,(portacle-bin-path "sbcl")))))
+      `((sbcl (,(portacle-bin-path "sbcl") "--dynamic-space-size" "8192"))))
 
 ;; Portacle's use of powerline.el hides SLY's non-intrusive mode-line,
 ;; so just bite that bullet and make it as intrusive as SLIME's.

@@ -40,7 +40,7 @@
 
 ;; Make sure Slime knows about our SBCL
 (setq slime-lisp-implementations
-      `((sbcl (,(portacle-bin-path "sbcl")))))
+      `((sbcl (,(portacle-bin-path "sbcl") "--dynamic-space-size" "8192"))))
 
 ;; Make sure Slime stores the FASLs within Portacle
 ;; @Override
